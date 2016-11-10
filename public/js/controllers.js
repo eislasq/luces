@@ -18,7 +18,7 @@ angular.module('myApp.controllers', []).
             });
 
             $scope.updateLuz = function (luzName, status) {
-//                console.log('emit', luzId, status);
+//                console.log('emit', luzName, status);
                 socket.emit('update:luz', {
                     luzName: luzName,
                     status: status

@@ -1,10 +1,19 @@
-div.text-center.row(ng-repeat='(luzName, luz) in luces')
+div.text-center(ng-repeat='(luzName, luz) in luces')    
     h2 {{luzName}}
-    div(class='btn-group')
-        button(ng-click="updateLuz(luzName,'on')", class='btn btn-success')
-            i(class='fa fa-sun-o fa-5x', ng-class='{active:luz=="on"}')
-        button(ng-click="updateLuz(luzName,'manual')", class='btn btn-default')
-            i(class='fa fa-hand-paper-o fa-5x', ng-class='{active:luz=="manual"}')
-        button(ng-click="updateLuz(luzName,'off')", class='btn btn-info')
-            i(class='fa fa-moon-o fa-5x', ng-class='{active:luz=="off"}')
+    div(class="switch-toggle switch-3 switch-candy")
+        input(id="off-{{luzName}}", name="state-{{luzName}}", type="radio", ng-value="'off'", ng-model='luz', ng-change="updateLuz(luzName,luz)")
+        label(for="off-{{luzName}}")
+            i(class="fa fa-moon-o fa-3x text-muted")
+
+        input(id="manual-{{luzName}}", name="state-{{luzName}}", type="radio", ng-value="'manual'", ng-model='luz', ng-change="updateLuz(luzName,luz)")
+        label(for="manual-{{luzName}}")
+            i(class='fa fa-hand-paper-o fa-3x text-success')
+
+        input(id="on-{{luzName}}", name="state-{{luzName}}", type="radio", ng-value="'on'", ng-model='luz', ng-change="updateLuz(luzName,luz)")
+        label(for="on-{{luzName}}", )
+            i(class='fa fa-sun-o fa-3x text-warning')
+        a
     hr
+br
+    
+link(rel="stylesheet", href='css/toggle-switch.css') 

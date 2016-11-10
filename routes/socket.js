@@ -18,7 +18,7 @@ module.exports = function (socket, io, gpio, updateLuz) {
     socket.on('update:luz', function (data) {
 //        console.log(data);
         //avisar a todos que se cambio el status
-		updateLuz(data);
+		//updateLuz(data);
         io.sockets.emit('updated:luz', data);
 //        gpio.setup(data.luzId, gpio.DIR_OUT, function () {
 //            gpio.write(data.luzId, true, function (err) {
