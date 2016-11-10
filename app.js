@@ -12,7 +12,7 @@ var express = require('express'),
 var app = module.exports = express();
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
-//var gpio = require('rpi-gpio');
+var gpio = require('rpi-gpio');
 
 /**
  * Configuration
@@ -55,68 +55,68 @@ app.get('*', routes.index);
 
 var pin={on:0, off:0};
 
-//gpio.on('change', function (channel, value) {
-//    require('./routes/gpioEvents')(channel, value, io);
-//});
+gpio.on('change', function (channel, value) {
+    require('./routes/gpioEvents')(channel, value, io);
+});
 //gpio.setup('17', gpio.DIR_IN, gpio.EDGE_BOTH);
 
 var luces = require('./routes/luces');
-//for (var luzName in luces) {
-//        var luz = luces[luzName];
-//		for(status in pin){
-//			gpio.setup(luz[status], gpio.DIR_OUT, gpio.EDGE_BOTH,  function(pin){
-//				return function(err){
-//					if(err){
-//							console.error('Setup', pin, err);
-//					}
-//					gpio.read(pin, function(err, active){
-//						if(err){
-//							console.error(err, pin);
-//						}else{
-//							console.log('Read', pin, active);
-//						}
-//					});
-//				}
-//			}(luz[status]));
-//		}
-//		
-//    }
+for (var luzName in luces) {
+        var luz = luces[luzName];
+		for(status in pin){
+			gpio.setup(luz[status], gpio.DIR_OUT, gpio.EDGE_BOTH,  function(pin){
+				return function(err){
+					if(err){
+							console.error('Setup', pin, err);
+					}
+					gpio.read(pin, function(err, active){
+						if(err){
+							console.error(err, pin);
+						}else{
+							console.log('Read', pin, active);
+						}
+					});
+				}
+			}(luz[status]));
+		}
+		
+    }
 
-//var updateLuz=function(data){
-//	if(luces.hasOwnProperty(data.luzName)){
-//		var luz=luces[data.luzName];
-//		switch(data.status){
-//			case 'on':
-//				pin.on=1;
-//				pin.off=0;
-//			break;
-//			case 'off':
-//				pin.on=0;
-//				pin.off=1;
-//			break;
-//			case 'manual':
-//			default:
-//				pin.on=0;
-//				pin.off=0;
-//		}
-//		for(status in pin){
-//			gpio.write(luz[status], !!pin[status], function(luz, pin, status){
-//				return function(err){
-//					if(err){
-//						console.error('Write', luz[status], pin[status], err);
-//					}else{
-//						console.log('Writed', luz[status], pin[status]);
-//					}
-//				};
-//			}(luz, pin, status));
-//		}
-//	}
-//};
+var updateLuz=function(data){
+	if(luces.hasOwnProperty(data.luzName)){
+		var luz=luces[data.luzName];
+		switch(data.status){
+			case 'on':
+				pin.on=1;
+				pin.off=0;
+			break;
+			case 'off':
+				pin.on=0;
+				pin.off=1;
+			break;
+			case 'manual':
+			default:
+				pin.on=0;
+				pin.off=0;
+		}
+		for(status in pin){
+			gpio.write(luz[status], !!pin[status], function(luz, pin, status){
+				return function(err){
+					if(err){
+						console.error('Write', luz[status], pin[status], err);
+					}else{
+						console.log('Writed', luz[status], pin[status]);
+					}
+				};
+			}(luz, pin, status));
+		}
+	}
+};
 
 
 // Socket.io Communication
 io.sockets.on('connection', function (socket) {
-    require('./routes/socket')(socket, io/*, gpio, updateLuz*/);
+    require('./routes/socket')(socket, io, gpio, updateLuz);
     for (var luzName in luces) {
         var luz = luces[luzName];
         socket.emit('updated:luz', {luzName: luzName, status: luz.status});
