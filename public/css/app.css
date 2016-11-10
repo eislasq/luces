@@ -38,3 +38,6 @@ i.active{
     border-radius: 50%;
     background-color: white;
 }
+.luz:nth-child(odd){
+    background-color: #f9f9f9;
+}
