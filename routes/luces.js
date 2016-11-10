@@ -7,6 +7,7 @@
 
 
 module.exports = {
-    'Sala': {status: 'on'}
-    , 'Comedor': {status: 'off'}
+    'Sala': {status: 'on', on:11, off:13}
+    , 'Comedor': {status: 'off', on:15, off:16}
+    , 'Entrda': {status: 'off', on:18, off:22}
 };

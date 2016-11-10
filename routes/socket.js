@@ -2,7 +2,7 @@
  * Serve content over a socket
  */
 
-module.exports = function (socket, io, gpio) {
+module.exports = function (socket, io, gpio, updateLuz) {
 //    console.log('#####io: ', this.testVar, socket.testVar);
 //    console.log(b,c);
     socket.emit('send:name', {
@@ -18,6 +18,7 @@ module.exports = function (socket, io, gpio) {
     socket.on('update:luz', function (data) {
 //        console.log(data);
         //avisar a todos que se cambio el status
+		updateLuz(data);
         io.sockets.emit('updated:luz', data);
 //        gpio.setup(data.luzId, gpio.DIR_OUT, function () {
 //            gpio.write(data.luzId, true, function (err) {
