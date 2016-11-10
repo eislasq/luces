@@ -53,17 +53,20 @@ app.get('/api/name', api.name);
 // redirect all others to the index (HTML5 history)
 app.get('*', routes.index);
 
-gpio.on('change', function (channel, value) {
-    require('./routes/gpioEvents')(channel, value, io);
-});
+//gpio.on('change', function (channel, value) {
+//    require('./routes/gpioEvents')(channel, value, io);
+//});
 //gpio.setup('17', gpio.DIR_IN, gpio.EDGE_BOTH);
 
-// Socket.io Communication
-//io.sockets.on('connection', require('./routes/socket'));
+var luces = require('./routes/luces');
 
 // Socket.io Communication
 io.sockets.on('connection', function (socket) {
     require('./routes/socket')(socket, io, gpio);
+    for (var luzName in luces) {
+        var luz = luces[luzName];
+        socket.emit('updated:luz', {luzName: luzName, status: luz.status});
+    }
 });
 
 /**

@@ -1,6 +1,10 @@
-p This is the partial for view 1.
-p The current time is {{time}}
-button(ng-click="updateLuz(17,'on')", class='btn btn-success') On
-button(ng-click="updateLuz(17,'manual')", class='btn btn-default') Manual
-button(ng-click="updateLuz(17,'off')", class='btn btn-info') Off
-p status:{{status}}
+div.text-center.row(ng-repeat='(luzName, luz) in luces')
+    h2 {{luzName}}
+    div(class='btn-group')
+        button(ng-click="updateLuz(luzName,'on')", class='btn btn-success')
+            i(class='fa fa-sun-o fa-5x', ng-class='{active:luz=="on"}')
+        button(ng-click="updateLuz(luzName,'manual')", class='btn btn-default')
+            i(class='fa fa-hand-paper-o fa-5x', ng-class='{active:luz=="manual"}')
+        button(ng-click="updateLuz(luzName,'off')", class='btn btn-info')
+            i(class='fa fa-moon-o fa-5x', ng-class='{active:luz=="off"}')
+    hr

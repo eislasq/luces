@@ -19,13 +19,13 @@ module.exports = function (socket, io, gpio) {
 //        console.log(data);
         //avisar a todos que se cambio el status
         io.sockets.emit('updated:luz', data);
-        gpio.setup(data.luzId, gpio.DIR_OUT, function () {
-            gpio.write(data.luzId, true, function (err) {
-                if (err)
-                    throw err;
-                console.log('Written to pin');
-            });
-        });
+//        gpio.setup(data.luzId, gpio.DIR_OUT, function () {
+//            gpio.write(data.luzId, true, function (err) {
+//                if (err)
+//                    throw err;
+//                console.log('Written to pin');
+//            });
+//        });
 
     });
 
