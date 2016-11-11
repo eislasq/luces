@@ -82,24 +82,28 @@ var luces = require('./routes/luces');
 //		
 //    }
 
-//var updateLuz=function(data){
-//	if(luces.hasOwnProperty(data.luzName)){
-//		var luz=luces[data.luzName];
-//		switch(data.status){
-//			case 'on':
-//				pin.on=1;
-//				pin.off=0;
-//			break;
-//			case 'off':
-//				pin.on=0;
-//				pin.off=1;
-//			break;
-//			case 'manual':
-//			default:
-//				pin.on=0;
-//				pin.off=0;
-//		}
-//		for(status in pin){
+
+var sys=require('sys');
+var exec=require('child_process').exec;
+
+var updateLuz=function(data){
+	if(luces.hasOwnProperty(data.luzName)){
+		var luz=luces[data.luzName];
+		switch(data.status){
+			case 'on':
+				pin.on=1;
+				pin.off=0;
+			break;
+			case 'off':
+				pin.on=0;
+				pin.off=1;
+			break;
+			case 'manual':
+			default:
+				pin.on=0;
+				pin.off=0;
+		}
+		for(status in pin){
 //			gpio.write(luz[status], !!pin[status], function(luz, pin, status){
 //				return function(err){
 //					if(err){
@@ -109,14 +113,17 @@ var luces = require('./routes/luces');
 //					}
 //				};
 //			}(luz, pin, status));
-//		}
-//	}
-//};
+			console.log('Writed', luz[status], pin[status]);
+			var child=exec('gpio -g mode '+luz[status]+' out');
+			var child=exec('gpio -g write '+luz[status]+' '+pin[status]);
+		}
+	}
+};
 
 
 // Socket.io Communication
 io.sockets.on('connection', function (socket) {
-    require('./routes/socket')(socket, io/*, gpio, updateLuz*/);
+    require('./routes/socket')(socket, io, updateLuz);
     for (var luzName in luces) {
         var luz = luces[luzName];
         socket.emit('updated:luz', {luzName: luzName, status: luz.status});
